@@ -10,6 +10,10 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
+# Copy NuGet.config and local packages FIRST
+COPY NuGet.config ./
+COPY .local-packages/ ./.local-packages/
+
 # Copy and restore dependencies
 COPY ["src/rules-engine-api/RulesEngine.Api.csproj", "src/rules-engine-api/"]
 RUN dotnet restore "src/rules-engine-api/RulesEngine.Api.csproj"
