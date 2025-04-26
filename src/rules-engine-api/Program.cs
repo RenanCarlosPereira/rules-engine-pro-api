@@ -3,6 +3,7 @@ using System.Text.Json;
 using RulesEngine.HelperFunctions;
 using Microsoft.AspNetCore.Mvc;
 using RulesEngine.Api;
+using static FastExpressionCompiler.ExpressionCompiler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,9 +36,14 @@ app.MapPost("/execute", async ([FromBody] InputWorkflow request, [FromQuery] str
     var rulesEngine = new RulesEngine.RulesEngine([workflow], reSettings);
 
     if (!string.IsNullOrWhiteSpace(ruleName))
-        return Results.Ok(await rulesEngine.ExecuteActionWorkflowAsync(workflow.WorkflowName, ruleName, parameters));
+    {
+        var result = await rulesEngine.ExecuteActionWorkflowAsync(workflow.WorkflowName, ruleName, parameters);
+        return Results.Ok(result);
+    }
 
-    return Results.Ok(await rulesEngine.ExecuteAllRulesAsync(workflow.WorkflowName, parameters));
+    var ruleResultTree = await rulesEngine.ExecuteAllRulesAsync(workflow.WorkflowName, parameters);
+    var workflowResult = new ActionRuleResult() { Results = ruleResultTree };
+    return Results.Ok(workflowResult);
 
 }).WithName("ExecuteWorkFlow");
 
