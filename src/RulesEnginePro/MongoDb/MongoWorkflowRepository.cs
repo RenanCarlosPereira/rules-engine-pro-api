@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using RulesEngine.Models;
 using RulesEnginePro.Core;
 using System.Runtime.CompilerServices;
@@ -32,15 +33,19 @@ internal class MongoWorkflowRepository(IMongoDatabase database, string collectio
         await _collection.DeleteOneAsync(filter, cancellationToken);
     }
 
-    public async IAsyncEnumerable<Workflow> GetAllWorkflowsAsync(int skip = 0, int take = 50, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Workflow> GetAllWorkflowsAsync(string? workflowName = default, int skip = 0, int take = 50, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
+        // Build the filter
+        var filter = string.IsNullOrWhiteSpace(workflowName) ? FilterDefinition<Workflow>.Empty
+            : Builders<Workflow>.Filter.Regex(x => x.WorkflowName, new BsonRegularExpression(workflowName, "i"));
+
         var options = new FindOptions<Workflow>
         {
             Skip = skip,
             Limit = take
         };
 
-        using var cursor = await _collection.FindAsync(FilterDefinition<Workflow>.Empty, options, cancellationToken);
+        using var cursor = await _collection.FindAsync(filter, options, cancellationToken);
 
         while (await cursor.MoveNextAsync(cancellationToken))
         {
@@ -51,4 +56,5 @@ internal class MongoWorkflowRepository(IMongoDatabase database, string collectio
             }
         }
     }
+
 }

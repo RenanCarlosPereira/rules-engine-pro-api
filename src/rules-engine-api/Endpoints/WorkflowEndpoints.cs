@@ -48,9 +48,9 @@ public static class WorkflowEndpoints
             return Results.NoContent();
         });
 
-        app.MapGet("/workflows", async ([FromServices] IWorkflowRepository repository, [AsParameters] PaginationQuery query, CancellationToken ct) =>
+        app.MapGet("/workflows", async ([FromQuery] string? workflowName, [FromServices] IWorkflowRepository repository, [AsParameters] PaginationQuery query, CancellationToken ct) =>
         {
-            var workflows = repository.GetAllWorkflowsAsync(query.Skip, query.Take, ct);
+            var workflows = repository.GetAllWorkflowsAsync(workflowName, query.Skip, query.Take, ct);
             return Results.Ok(workflows);
         });
 
