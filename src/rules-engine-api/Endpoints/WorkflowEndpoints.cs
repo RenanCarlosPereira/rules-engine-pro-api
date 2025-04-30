@@ -42,20 +42,16 @@ public static class WorkflowEndpoints
             return Results.NoContent();
         });
 
-        app.MapDelete("/workflows/{workflowName}", async (string workflowName, [FromServices]IWorkflowRepository repository, CancellationToken ct) =>
+        app.MapDelete("/workflows/{workflowName}", async (string workflowName, [FromServices] IWorkflowRepository repository, CancellationToken ct) =>
         {
             await repository.DeleteWorkflowAsync(workflowName, ct);
             return Results.NoContent();
         });
 
-        app.MapGet("/workflows", async ([FromServices]IWorkflowRepository repository, CancellationToken ct) =>
+        app.MapGet("/workflows", async ([FromServices] IWorkflowRepository repository, [AsParameters] PaginationQuery query, CancellationToken ct) =>
         {
-            var workflows = new List<Workflow>();
-            await foreach (var wf in repository.GetAllWorkflowsAsync(ct))
-            {
-                workflows.Add(wf);
-            }
-            return Results.Ok(workflows.ToList());
+            var workflows = repository.GetAllWorkflowsAsync(query.Skip, query.Take, ct);
+            return Results.Ok(workflows);
         });
 
         return app;

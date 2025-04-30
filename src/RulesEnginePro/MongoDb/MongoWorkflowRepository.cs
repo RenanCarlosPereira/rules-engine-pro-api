@@ -32,14 +32,21 @@ internal class MongoWorkflowRepository(IMongoDatabase database, string collectio
         await _collection.DeleteOneAsync(filter, cancellationToken);
     }
 
-    public async IAsyncEnumerable<Workflow> GetAllWorkflowsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Workflow> GetAllWorkflowsAsync(int skip = 0, int take = 50, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        using var cursor = await _collection.FindAsync(Builders<Workflow>.Filter.Empty, cancellationToken: cancellationToken);
+        var options = new FindOptions<Workflow>
+        {
+            Skip = skip,
+            Limit = take
+        };
+
+        using var cursor = await _collection.FindAsync(FilterDefinition<Workflow>.Empty, options, cancellationToken);
 
         while (await cursor.MoveNextAsync(cancellationToken))
         {
             foreach (var workflow in cursor.Current)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return workflow;
             }
         }
