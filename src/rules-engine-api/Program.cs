@@ -1,11 +1,11 @@
-using RulesEngine.Models;
-using System.Text.Json;
-using RulesEngine.HelperFunctions;
-using Microsoft.AspNetCore.Mvc;
-using RulesEngine.Api;
-using static FastExpressionCompiler.ExpressionCompiler;
+using RulesEngine.Api.Endpoints;
+using RulesEnginePro.Core;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRulesEnginePro();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
@@ -14,41 +14,10 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()));
 
 var app = builder.Build();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors();
+app.MapWorkflowEndpoints();
 
-app.MapPost("/identifiers", (Workflow workflow) =>
-{
-    var identifies = workflow.ExtractIdentifiers().ToList();
-    return identifies.GenerateSchema();
-})
-.WithName("GetIdentifiers");
-
-
-app.MapPost("/execute", async ([FromBody] InputWorkflow request, [FromQuery] string? ruleName) =>
-{
-    var workflow = request.Workflow;
-    var inputs = request.Inputs;
-    var dictionary = inputs.Deserialize<Dictionary<string, JsonElement?>>();
-    var parameters = dictionary?.Select(x => RuleParameter.Create(x.Key, x.Value?.ToExpandoObject())).OfType<RuleParameter>().ToArray() ?? [];
-
-    var reSettings = new ReSettings { CustomTypes = [typeof(RulesEngine.Api.Utils)] };
-    var rulesEngine = new RulesEngine.RulesEngine([workflow], reSettings);
-
-    if (!string.IsNullOrWhiteSpace(ruleName))
-    {
-        var result = await rulesEngine.ExecuteActionWorkflowAsync(workflow.WorkflowName, ruleName, parameters);
-        return Results.Ok(result);
-    }
-
-    var ruleResultTree = await rulesEngine.ExecuteAllRulesAsync(workflow.WorkflowName, parameters);
-    var workflowResult = new ActionRuleResult() { Results = ruleResultTree };
-    return Results.Ok(workflowResult);
-
-}).WithName("ExecuteWorkFlow");
-
-app.Run();
-
-public record InputWorkflow(JsonElement Inputs, Workflow Workflow);
-
-
+await app.RunAsync();
