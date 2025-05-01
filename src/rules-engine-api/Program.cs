@@ -51,7 +51,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapWorkflowEndpoints();
 app.MapUserEndpoints();
