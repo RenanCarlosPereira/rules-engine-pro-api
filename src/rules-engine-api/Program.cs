@@ -14,6 +14,12 @@ builder.Services.AddGithubAuthentication(builder.Configuration);
 // Configure CORS
 var frontendOrigin = builder.Configuration.GetSection("Cors:Urls").Get<string[]>() ?? [];
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("rules-engine-pro", policy =>
