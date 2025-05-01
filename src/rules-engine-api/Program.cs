@@ -14,7 +14,6 @@ builder.Services.AddGithubAuthentication(builder.Configuration);
 // Configure CORS
 var frontendOrigin = builder.Configuration.GetSection("Cors:Urls").Get<string[]>() ?? [];
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("rules-engine-pro", policy =>
@@ -27,6 +26,9 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Forwarded Headers
+app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedProto });
 
 // Swagger
 app.UseSwagger();
