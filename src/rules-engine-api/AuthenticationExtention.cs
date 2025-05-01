@@ -52,6 +52,8 @@ public static class AuthenticationExtention
                 };
             });
 
+        services.AddAuthorization();
+
         return services;
     }
 }
