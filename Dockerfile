@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Render requires apps to bind to this dynamic port
 ENV ASPNETCORE_URLS=http://+:$PORT
+ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 
 # Build image
 FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build

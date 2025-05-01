@@ -21,6 +21,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.Domain = ".rules-engine-pro.com";
 });
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("rules-engine-pro", policy =>
