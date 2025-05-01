@@ -3,6 +3,8 @@ using RulesEngine.Api;
 using RulesEngine.Api.Endpoints;
 using RulesEnginePro.Core;
 
+string policy = "rules-engine-pro";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
@@ -23,13 +25,14 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto;
     options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
 });
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("rules-engine-pro", policy =>
+    options.AddPolicy(policy, policy =>
     {
         policy.WithOrigins(frontendOrigin)
               .AllowAnyHeader()
@@ -40,25 +43,16 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Forwarded Headers
+app.UseForwardedHeaders();
 
-var forwardedHeadersOptions = new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost };
-forwardedHeadersOptions.KnownNetworks.Clear();
-forwardedHeadersOptions.KnownProxies.Clear();
-app.UseForwardedHeaders(forwardedHeadersOptions);
+app.UseCors(policy);
 
-// Cors config
-app.UseCors("rules-engine-pro");
-
-// Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Endpoints
 app.MapWorkflowEndpoints();
 app.MapUserEndpoints();
 
