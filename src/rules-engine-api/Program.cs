@@ -18,6 +18,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.Domain = ".rules-engine-pro.com";
 });
 
 builder.Services.AddCors(options =>
@@ -34,7 +35,11 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Forwarded Headers
-app.UseForwardedHeaders();
+
+var forwardedHeadersOptions = new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto };
+forwardedHeadersOptions.KnownNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeadersOptions);
 
 // Cors config
 app.UseCors("rules-engine-pro");
