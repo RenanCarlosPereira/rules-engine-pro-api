@@ -28,14 +28,16 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Forwarded Headers
-app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedProto });
+app.UseForwardedHeaders();
+
+// Cors config
+app.UseCors("rules-engine-pro");
 
 // Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
 // Middleware
-app.UseCors("rules-engine-pro");
 app.UseAuthentication();
 app.UseAuthorization();
 
