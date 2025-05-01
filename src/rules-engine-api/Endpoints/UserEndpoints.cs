@@ -14,7 +14,7 @@ public static class UserEndpoints
     {
         app.MapGet("/login", async (HttpContext context, [FromServices]IConfiguration configuration) =>
         {
-            var redirectUri = configuration.GetValue("RedirectUri", "https://rules-engine-pro-ui.onrender.com");
+            var redirectUri = configuration.GetValue("RedirectUri", "http://localhost:4200/");
             await context.ChallengeAsync(GitHubAuthenticationDefaults.AuthenticationScheme,
                 new AuthenticationProperties { RedirectUri = redirectUri });
         });

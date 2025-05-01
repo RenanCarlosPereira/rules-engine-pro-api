@@ -14,11 +14,6 @@ builder.Services.AddGithubAuthentication(builder.Configuration);
 // Configure CORS
 var frontendOrigin = builder.Configuration.GetSection("Cors:Urls").Get<string[]>() ?? [];
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-});
 
 builder.Services.AddCors(options =>
 {
@@ -32,12 +27,6 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
-// Use forwarded headers
-app.UseForwardedHeaders();
-
-// Redirect HTTP to HTTPS
-app.UseHttpsRedirection();
 
 // Swagger
 app.UseSwagger();
