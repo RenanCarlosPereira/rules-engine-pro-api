@@ -10,9 +10,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddGithubAuthentication(builder.Configuration);
 
 var frontendOrigin = builder.Configuration.GetSection("Cors:Urls").Get<string[]>() ?? [];
+Console.WriteLine($"config cors are {string.Join(",", frontendOrigin)}");
 
 builder.Services.AddCors(options =>
 {
+    
     options.AddPolicy("rules-engine-pro", policy =>
     {
         policy.WithOrigins(frontendOrigin)
