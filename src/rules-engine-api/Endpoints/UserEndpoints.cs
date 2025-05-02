@@ -25,7 +25,7 @@ public static class UserEndpoints
         });
 
 
-        app.MapGet("/me", (HttpContext context) =>
+        app.MapGet("/me", [Authorize](HttpContext context) =>
         {
             var user = context.User;
 
