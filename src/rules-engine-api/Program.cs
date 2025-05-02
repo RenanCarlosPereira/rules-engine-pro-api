@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.HttpOverrides;
+using RulesEngine.Api;
 using RulesEngine.Api.Endpoints;
 using RulesEnginePro.Core;
 
@@ -10,9 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRulesEnginePro();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddGithubAuthentication(builder.Configuration);
 
 // Configure CORS
 var frontendOrigin = builder.Configuration.GetSection("Cors:Urls").Get<string[]>() ?? [];
+
+
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
@@ -40,6 +44,9 @@ app.UseCors(policy);
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapWorkflowEndpoints();
 app.MapUserEndpoints();
