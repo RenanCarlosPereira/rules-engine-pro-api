@@ -4,7 +4,6 @@ using System.Text.Json;
 
 namespace RulesEnginePro.MongoDb.Serializers;
 
-
 public class GlobalObjectSerializer : SerializerBase<object>
 {
     private readonly JsonElementBsonDocumentSerializer _jsonElementBsonDocumentSerializer = new();

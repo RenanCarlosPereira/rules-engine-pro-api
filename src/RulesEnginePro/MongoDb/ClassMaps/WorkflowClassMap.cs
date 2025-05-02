@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization;
 using RulesEngine.Models;
+using RulesEnginePro.Models;
 
 namespace RulesEnginePro.MongoDb.ClassMaps;
 
@@ -13,6 +14,15 @@ public static class WorkflowClassMap
             {
                 cm.AutoMap();
                 cm.MapIdMember(x => x.WorkflowName);
+                cm.SetIgnoreExtraElements(true);
+            });
+        }
+
+        if (!BsonClassMap.IsClassMapRegistered(typeof(WorkflowData)))
+        {
+            BsonClassMap.RegisterClassMap<WorkflowData>(cm =>
+            {
+                cm.AutoMap();
                 cm.SetIgnoreExtraElements(true);
             });
         }

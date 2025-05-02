@@ -6,7 +6,6 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace RulesEnginePro.MongoDb.Serializers;
 
-
 public class JsonElementBsonDocumentSerializer : SerializerBase<JsonElement>
 {
     private static readonly JsonWriterSettings JsonWriterSettins = new() { OutputMode = JsonOutputMode.RelaxedExtendedJson };

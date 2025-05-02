@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using RulesEngine.Interfaces;
 using RulesEngine.Models;
+using RulesEnginePro.Models;
 using RulesEnginePro.MongoDb;
 using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.Tokenizer;
@@ -86,7 +87,7 @@ public static class RulesEngineProExtension
         return root;
     }
 
-    public static IEnumerable<string> ExtractIdentifiers(this Workflow workflow)
+    public static IEnumerable<string> ExtractIdentifiers(this WorkflowData workflow)
     {
         var config = new ParsingConfig();
         var identifiers = new HashSet<string>();
@@ -149,7 +150,7 @@ public static class RulesEngineProExtension
         return identifiers;
     }
 
-    private static IEnumerable<string> GetAllExpressions(this Workflow workflow)
+    private static IEnumerable<string> GetAllExpressions(this WorkflowData workflow)
     {
         if (workflow?.Rules == null)
             yield break;

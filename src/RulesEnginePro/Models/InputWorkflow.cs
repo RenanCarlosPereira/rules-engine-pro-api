@@ -1,6 +1,5 @@
-﻿using RulesEngine.Models;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace RulesEnginePro.Models;
 
-public record InputWorkflow(JsonElement Inputs, Workflow Workflow);
+public record InputWorkflow(JsonElement Inputs, WorkflowData WorkflowData);
