@@ -48,5 +48,6 @@ app.UseAuthorization();
 
 app.MapWorkflowEndpoints();
 app.MapUserEndpoints();
+app.MapActionEndpoints();
 
 await app.RunAsync();

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using RulesEngine.Interfaces;
 using RulesEngine.Models;
+using RulesEnginePro.Actions;
 using RulesEnginePro.Models;
 using RulesEnginePro.MongoDb;
 using System.Linq.Dynamic.Core;
@@ -17,6 +18,7 @@ public static class RulesEngineProExtension
         services.ConfigureOptions<ReSettingsConfigureOptions>();
 
         services.AddMongoDb();
+        services.AddContextAction();
 
         services.AddSingleton<IRulesEngine>((sp) =>
         {

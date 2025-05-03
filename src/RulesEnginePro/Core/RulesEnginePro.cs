@@ -11,7 +11,7 @@ internal class RulesEnginePro(IRulesEngine rulesEngine) : IRulesEnginePro
 {
     public async Task<ActionRuleResult> ExecuteActionWorkflowAsync(InputWorkflow request, string? ruleName = default, CancellationToken cancellationToken = default)
     {
-        var workflow = request.WorkflowData;
+        var workflow = request.Workflow;
         var inputs = request.Inputs;
 
         var dictionary = inputs.Deserialize<Dictionary<string, JsonElement?>>();

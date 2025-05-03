@@ -2,4 +2,4 @@
 
 namespace RulesEnginePro.Models;
 
-public record InputWorkflow(JsonElement Inputs, WorkflowData WorkflowData);
+public record InputWorkflow(JsonElement Inputs, WorkflowData Workflow);
