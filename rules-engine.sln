@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulesEngine.Api", "src\rule
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulesEnginePro", "src\RulesEnginePro\RulesEnginePro.csproj", "{65972032-BBEE-44D0-8FDF-F1EB160C4C87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulesEnginePro.Tests", "tests\RulesEnginePro.Tests\RulesEnginePro.Tests.csproj", "{1E438203-491D-4BDB-85AA-132652323E1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{65972032-BBEE-44D0-8FDF-F1EB160C4C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65972032-BBEE-44D0-8FDF-F1EB160C4C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65972032-BBEE-44D0-8FDF-F1EB160C4C87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E438203-491D-4BDB-85AA-132652323E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E438203-491D-4BDB-85AA-132652323E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E438203-491D-4BDB-85AA-132652323E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E438203-491D-4BDB-85AA-132652323E1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
