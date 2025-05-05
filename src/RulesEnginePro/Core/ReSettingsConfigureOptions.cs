@@ -3,9 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RulesEngine.Models;
 using RulesEnginePro.Actions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RulesEnginePro.Core;
 
+[ExcludeFromCodeCoverage]
 internal class ReSettingsConfigureOptions(IConfiguration configuration, IServiceProvider serviceProvider) : IConfigureOptions<ReSettings>
 {
     public void Configure(ReSettings options)

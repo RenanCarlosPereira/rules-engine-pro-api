@@ -1,7 +1,9 @@
 ﻿using RulesEngine.Actions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RulesEnginePro.Actions;
 
+[ExcludeFromCodeCoverage]
 public abstract class ContextActionBase : ActionBase
 {
     public Dictionary<string, FieldDefinition> ContextDefinition => BuildContextDefinition();

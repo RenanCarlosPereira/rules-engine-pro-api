@@ -25,6 +25,14 @@ jobs:
     
     - name: Test
       run: dotnet test rules-engine.sln --collect:"XPlat Code Coverage" --no-build --configuration Release --verbosity m 
+
+    - name: Generate Report
+      shell: pwsh
+      run: ./scripts/generate-coverage-report.ps1
+
+    - name: Check Coverage
+      shell: pwsh
+      run: ./scripts/check-coverage.ps1 -reportPath coveragereport/Cobertura.xml -threshold 44
     
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v2.3.6

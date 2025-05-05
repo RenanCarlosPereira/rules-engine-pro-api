@@ -3,9 +3,11 @@ using Microsoft.Extensions.Options;
 using RulesEngine.ExpressionBuilders;
 using RulesEngine.Models;
 using RulesEnginePro.Core;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RulesEnginePro.Actions;
 
+[ExcludeFromCodeCoverage]
 public static class ContextActionExtension
 {
     public static IServiceCollection AddContextAction(this IServiceCollection services)

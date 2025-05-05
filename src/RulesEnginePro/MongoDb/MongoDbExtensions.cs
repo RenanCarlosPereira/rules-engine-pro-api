@@ -7,10 +7,12 @@ using MongoDB.Driver;
 using RulesEnginePro.Core;
 using RulesEnginePro.MongoDb.ClassMaps;
 using RulesEnginePro.MongoDb.Serializers;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace RulesEnginePro.MongoDb;
 
+[ExcludeFromCodeCoverage]
 internal static class MongoDbExtensions
 {
     public static IServiceCollection AddMongoDb(this IServiceCollection services)

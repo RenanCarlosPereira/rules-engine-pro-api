@@ -38,6 +38,6 @@ public class SendEmailAction : ContextActionBase
 
     public override ValueTask<object> Run(ActionContext context, RuleParameter[] ruleParameters)
     {
-        throw new NotImplementedException();
+        return ValueTask.FromResult<object>(new { Message = "Email sent" });
     }
 }

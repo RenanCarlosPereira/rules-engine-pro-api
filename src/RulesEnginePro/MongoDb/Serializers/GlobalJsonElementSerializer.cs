@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace RulesEnginePro.MongoDb.Serializers;
