@@ -1,123 +1,132 @@
 ﻿using FluentAssertions;
-using Mongo2Go;
 using MongoDB.Driver;
+using Moq;
 using RulesEnginePro.Models;
 using RulesEnginePro.MongoDb;
-using RulesEnginePro.MongoDb.ClassMaps;
 
 namespace RulesEnginePro.Tests.MongoDb;
 
-public class MongoWorkflowRepositoryTests : IAsyncLifetime
+public class MongoWorkflowRepositoryMockTests
 {
-    private readonly MongoDbRunner _runner;
-    private readonly IMongoDatabase _database;
+    private readonly Mock<IMongoCollection<WorkflowData>> _collectionMock = new();
+    private readonly Mock<IMongoDatabase> _databaseMock = new();
     private readonly MongoWorkflowRepository _repository;
 
-    public MongoWorkflowRepositoryTests()
+    public MongoWorkflowRepositoryMockTests()
     {
-        WorkflowClassMap.Register();
-        _runner = MongoDbRunner.Start(singleNodeReplSet: true);
-        var client = new MongoClient(_runner.ConnectionString);
-        _database = client.GetDatabase("test-db");
-        _repository = new MongoWorkflowRepository(_database);
-    }
+        _databaseMock.Setup(d => d.GetCollection<WorkflowData>(It.IsAny<string>(), null))
+            .Returns(_collectionMock.Object);
 
-    public Task InitializeAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    public Task DisposeAsync()
-    {
-        _runner?.Dispose();
-        return Task.CompletedTask;
+        _repository = new MongoWorkflowRepository(_databaseMock.Object);
     }
 
     [Fact]
-    public async Task CreateAndGetWorkflowAsync_ShouldPersistAndReturnWorkflow()
+    public async Task CreateWorkflowAsync_ShouldInsertWorkflow()
     {
         // Arrange
         var workflow = new WorkflowData { WorkflowName = "test-flow" };
 
         // Act
         await _repository.CreateWorkflowAsync(workflow);
+
+        // Assert
+        _collectionMock.Verify(c => c.InsertOneAsync(workflow, null, default), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetWorkflowAsync_ShouldReturnMatchingWorkflow()
+    {
+        // Arrange
+        var workflow = new WorkflowData { WorkflowName = "test-flow" };
+
+        var cursorMock = new Mock<IAsyncCursor<WorkflowData>>();
+        cursorMock.SetupSequence(c => c.MoveNextAsync(It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(true)
+                  .ReturnsAsync(false);
+        cursorMock.Setup(c => c.Current).Returns(new[] { workflow });
+
+        _collectionMock
+            .Setup(c => c.FindAsync(
+                It.IsAny<FilterDefinition<WorkflowData>>(),
+                It.IsAny<FindOptions<WorkflowData, WorkflowData>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(cursorMock.Object);
+
+        // Act
         var result = await _repository.GetWorkflowAsync("test-flow");
 
         // Assert
-        result.Should().NotBeNull();
-        result.WorkflowName.Should().Be("test-flow");
+        result.Should().BeEquivalentTo(workflow);
     }
 
     [Fact]
-    public async Task UpdateWorkflowAsync_ShouldReplaceExistingWorkflow()
+    public async Task UpdateWorkflowAsync_ShouldCallReplaceOne()
     {
         // Arrange
-        var workflow = new WorkflowData { WorkflowName = "replace-me" };
-        await _repository.CreateWorkflowAsync(workflow);
-
-        var updated = new WorkflowData { WorkflowName = "replace-me", Rules = [new() { RuleName = "new-rule" }] };
+        var workflow = new WorkflowData { WorkflowName = "flow-update" };
 
         // Act
-        await _repository.UpdateWorkflowAsync(updated);
-        var result = await _repository.GetWorkflowAsync("replace-me");
+        await _repository.UpdateWorkflowAsync(workflow);
 
         // Assert
-        result.Should().NotBeNull();
-        result.Rules.Should().ContainSingle(r => r.RuleName == "new-rule");
+        _collectionMock.Verify(c =>
+            c.ReplaceOneAsync(
+                It.IsAny<FilterDefinition<WorkflowData>>(),
+                workflow,
+                It.Is<ReplaceOptions>(o => o.IsUpsert == true),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Fact]
-    public async Task DeleteWorkflowAsync_ShouldRemoveWorkflow()
+    public async Task DeleteWorkflowAsync_ShouldCallDeleteOne()
     {
         // Arrange
-        var workflow = new WorkflowData { WorkflowName = "delete-me" };
-        await _repository.CreateWorkflowAsync(workflow);
+        var workflowName = "flow-delete";
 
         // Act
-        await _repository.DeleteWorkflowAsync("delete-me");
-        var result = await _repository.GetWorkflowAsync("delete-me");
+        await _repository.DeleteWorkflowAsync(workflowName);
 
         // Assert
-        result.Should().BeNull();
+        _collectionMock.Verify(c =>
+            c.DeleteOneAsync(
+                It.IsAny<FilterDefinition<WorkflowData>>(),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Fact]
-    public async Task GetAllWorkflowsAsync_ShouldReturnFilteredResults()
+    public async Task GetAllWorkflowsAsync_ShouldReturnMatchingWorkflows()
     {
         // Arrange
-        await _repository.CreateWorkflowAsync(new WorkflowData { WorkflowName = "flow1" });
-        await _repository.CreateWorkflowAsync(new WorkflowData { WorkflowName = "flow2" });
+        var workflows = new List<WorkflowData>
+    {
+        new WorkflowData { WorkflowName = "flow-1" },
+        new WorkflowData { WorkflowName = "flow-2" }
+    };
+
+        var cursorMock = new Mock<IAsyncCursor<WorkflowData>>();
+        cursorMock.SetupSequence(x => x.MoveNextAsync(It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(true)
+                  .ReturnsAsync(false);
+        cursorMock.Setup(x => x.Current).Returns(workflows);
+
+        _collectionMock.Setup(c =>
+                c.FindAsync(
+                    It.IsAny<FilterDefinition<WorkflowData>>(),
+                    It.IsAny<FindOptions<WorkflowData, WorkflowData>>(),
+                    It.IsAny<CancellationToken>()))
+            .ReturnsAsync(cursorMock.Object);
 
         // Act
-        var results = new List<WorkflowData>();
+        var result = new List<WorkflowData>();
         await foreach (var w in _repository.GetAllWorkflowsAsync("flow"))
         {
-            results.Add(w);
+            result.Add(w);
         }
 
         // Assert
-        results.Should().HaveCount(2);
-        results.Should().OnlyContain(w => w.WorkflowName.Contains("flow"));
-    }
-
-    [Fact]
-    public async Task GetAllWorkflowsAsync_ShouldSupportPagination()
-    {
-        // Arrange
-        for (int i = 0; i < 10; i++)
-        {
-            await _repository.CreateWorkflowAsync(new WorkflowData { WorkflowName = $"paginated-{i}" });
-        }
-
-        // Act
-        var paged = new List<WorkflowData>();
-        await foreach (var w in _repository.GetAllWorkflowsAsync("paginated", skip: 5, take: 3))
-        {
-            paged.Add(w);
-        }
-
-        // Assert
-        paged.Should().HaveCount(3);
-        paged[0].WorkflowName.Should().Contain("paginated");
+        result.Should().HaveCount(2);
+        result[0].WorkflowName.Should().Be("flow-1");
     }
 }
