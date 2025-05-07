@@ -13,24 +13,24 @@ WORKDIR /src
 
 
 # Copy and restore dependencies
-COPY ["src/RulesEngine.Api/RulesEngine.Api.csproj", "src/RulesEngine.Api/"]
-RUN dotnet restore "src/RulesEngine.Api/RulesEngine.Api.csproj"
+COPY ["src/RulesEnginePro.Api/RulesEnginePro.Api.csproj", "src/RulesEnginePro.Api/"]
+RUN dotnet restore "src/RulesEnginePro.Api/RulesEnginePro.Api.csproj"
 
 # Copy the rest of the code
 COPY . .
 
 # Build the app
-WORKDIR "/src/src/RulesEngine.Api"
-RUN dotnet build "RulesEngine.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/build
+WORKDIR "/src/src/RulesEnginePro.Api"
+RUN dotnet build "RulesEnginePro.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/build
 
 # Publish the app
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "RulesEngine.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "RulesEnginePro.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
 
 # Final stage for production
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-ENTRYPOINT ["dotnet", "RulesEngine.Api.dll"]
+ENTRYPOINT ["dotnet", "RulesEnginePro.Api.dll"]
