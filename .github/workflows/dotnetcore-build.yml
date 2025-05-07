@@ -24,7 +24,7 @@ jobs:
       run: dotnet build rules-engine.sln --configuration Release --no-restore
     
     - name: Test
-      run: dotnet test rules-engine.sln --collect:"XPlat Code Coverage" --no-build --configuration Release --verbosity m --filter \"FullyQualifiedName!~RulesEnginePro.Api.Tests\"
+      run: dotnet test rules-engine.sln --collect:"XPlat Code Coverage" --no-build --configuration Release --verbosity m 
 
     - name: Generate Report
       shell: pwsh

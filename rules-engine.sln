@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulesEnginePro", "src\Rules
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulesEnginePro.Tests", "tests\RulesEnginePro.Tests\RulesEnginePro.Tests.csproj", "{1E438203-491D-4BDB-85AA-132652323E1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulesEnginePro.Api.Tests", "tests\RulesEnginePro.Api.Tests\RulesEnginePro.Api.Tests.csproj", "{BEE48143-15CD-E788-D127-041A3DD5572D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulesEnginePro.Api", "src\RulesEnginePro.Api\RulesEnginePro.Api.csproj", "{2CA3A9CC-5109-C9B9-8193-7F67A2F7FBA9}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{1E438203-491D-4BDB-85AA-132652323E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E438203-491D-4BDB-85AA-132652323E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E438203-491D-4BDB-85AA-132652323E1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEE48143-15CD-E788-D127-041A3DD5572D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEE48143-15CD-E788-D127-041A3DD5572D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEE48143-15CD-E788-D127-041A3DD5572D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEE48143-15CD-E788-D127-041A3DD5572D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2CA3A9CC-5109-C9B9-8193-7F67A2F7FBA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2CA3A9CC-5109-C9B9-8193-7F67A2F7FBA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CA3A9CC-5109-C9B9-8193-7F67A2F7FBA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
