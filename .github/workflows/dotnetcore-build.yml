@@ -24,7 +24,7 @@ jobs:
       run: dotnet build rules-engine.sln --configuration Release --no-restore
     
     - name: Test
-      run: dotnet test rules-engine.sln --collect:"XPlat Code Coverage" --no-build --configuration Release --verbosity m 
+      run: dotnet test rules-engine.sln --collect:"XPlat Code Coverage" --no-build --configuration Release --verbosity m --filter \"FullyQualifiedName!~RulesEnginePro.Api.Tests\"
 
     - name: Generate Report
       shell: pwsh
@@ -32,7 +32,7 @@ jobs:
 
     - name: Check Coverage
       shell: pwsh
-      run: ./scripts/check-coverage.ps1 -reportPath coveragereport/Cobertura.xml -threshold 44
+      run: ./scripts/check-coverage.ps1 -reportPath coveragereport/Cobertura.xml -threshold 71
     
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v2.3.6

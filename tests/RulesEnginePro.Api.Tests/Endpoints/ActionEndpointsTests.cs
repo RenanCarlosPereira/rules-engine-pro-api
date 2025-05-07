@@ -20,7 +20,7 @@ public class ActionEndpointsTests
 
         _factory.ContextActionServiceMock
         .Setup(s => s.GetContextActions(It.IsAny<CancellationToken>()))
-            .Returns(SampleContextActions);
+            .Returns(SampleContextActions().ToAsyncEnumerable());
 
         _client = fixture.CreateAuthenticatedClient();
     }
@@ -38,7 +38,7 @@ public class ActionEndpointsTests
         array[0].GetProperty("key").GetString().Should().Be("SampleAction");
     }
 
-    private static async IAsyncEnumerable<KeyValuePair<string, Dictionary<string, ContextActionBase.FieldDefinition>>> SampleContextActions()
+    private static IEnumerable<KeyValuePair<string, Dictionary<string, ContextActionBase.FieldDefinition>>> SampleContextActions()
     {
         yield return new KeyValuePair<string, Dictionary<string, ContextActionBase.FieldDefinition>>("SampleAction",
             new Dictionary<string, ContextActionBase.FieldDefinition>()
