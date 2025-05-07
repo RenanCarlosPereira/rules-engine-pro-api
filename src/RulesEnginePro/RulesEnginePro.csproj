@@ -11,7 +11,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="9.0.4" />
 		<PackageReference Include="MongoDB.Driver" Version="3.3.0" />
-		<PackageReference Include="RulesEngineEx" Version="7.0.0" />
+		<PackageReference Include="RulesEngineEx" Version="6.0.10" />
 	</ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace RulesEngine.Api;
+namespace RulesEnginePro.Api;
 
 public static class AuthenticationExtention
 {

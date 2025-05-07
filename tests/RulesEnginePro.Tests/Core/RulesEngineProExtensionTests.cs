@@ -37,14 +37,14 @@ namespace RulesEnginePro.Tests.Core
 
             var userProps = user["properties"]!.AsObject();
             userProps.Should().ContainKey("name");
-            userProps["name"]!["type"]!.AsArray().Select(x=>x.ToString()).Should().Contain("null");
+            userProps["name"]!["type"]!.AsArray().Select(x => x?.ToString()).Should().Contain("null");
 
             var address = userProps["address"]!.AsObject();
             address["type"]!.ToString().Should().Be("object");
 
             var addressProps = address["properties"]!.AsObject();
             addressProps.Should().ContainKey("city");
-            addressProps["city"]!["type"]!.AsArray().Select(x => x.ToString()).Should().Contain("null");
+            addressProps["city"]!["type"]!.AsArray().Select(x => x?.ToString()).Should().Contain("null");
         }
 
         [Fact]

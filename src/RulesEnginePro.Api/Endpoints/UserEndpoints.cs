@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using RulesEnginePro.Models;
 using System.Security.Claims;
 
-namespace RulesEngine.Api.Endpoints;
+namespace RulesEnginePro.Api.Endpoints;
 
 public static class UserEndpoints
 {

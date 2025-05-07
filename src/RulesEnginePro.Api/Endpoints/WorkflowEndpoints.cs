@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RulesEnginePro.Core;
 using RulesEnginePro.Models;
 
-namespace RulesEngine.Api.Endpoints;
+namespace RulesEnginePro.Api.Endpoints;
 
 public static class WorkflowEndpoints
 {

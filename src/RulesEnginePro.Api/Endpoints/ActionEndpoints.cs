@@ -1,6 +1,6 @@
 ﻿using RulesEnginePro.Actions;
 
-namespace RulesEngine.Api.Endpoints;
+namespace RulesEnginePro.Api.Endpoints;
 
 public static class ActionEndpoints
 {

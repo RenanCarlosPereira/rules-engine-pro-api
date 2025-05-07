@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
-using RulesEngine.Api;
-using RulesEngine.Api.Endpoints;
+using RulesEnginePro.Api;
+using RulesEnginePro.Api.Endpoints;
 using RulesEnginePro.Core;
 
 string policy = "rules-engine-pro";
@@ -51,3 +51,10 @@ app.MapUserEndpoints();
 app.MapActionEndpoints();
 
 await app.RunAsync();
+
+public partial class Program
+{
+    protected Program()
+    {
+    }
+}
